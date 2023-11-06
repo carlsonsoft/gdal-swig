@@ -26,29 +26,32 @@ jobs:
 
       - name: Download GDAL source code
         run: |
-          wget https://github.com/OSGeo/gdal/archive/refs/tags/v3.6.2.tar.gz
-          tar -xf v3.6.2.tar.gz
+          wget https://github.com/OSGeo/gdal/archive/3.6.2.tar.gz
+          tar -xf 3.6.2.tar.gz
+          mv gdal-3.6.2 gdal
 
       - name: Build GDAL
         run: |
-          cd gdal-3.6.2
-          ./configure --with-java
+          cd gdal
+          mkdir build
+          cd build
+          cmake .. -DWITH_JAVA=ON
           make
 
       - name: Build SWIG Bindings
         run: |
-          cd gdal-3.6.2/swig/java
+          cd gdal/swig/java
           make java
 
       - name: Compile SO file
         run: |
-          cd gdal-3.6.2/swig/java
+          cd gdal/swig/java
           g++ -shared -o libgdal.so libgdal_wrap.o -L/usr/lib -lgdal
 
       - name: Create artifacts
         run: |
           mkdir artifacts
-          cp gdal-3.6.2/swig/java/libgdal.so artifacts/
+          cp gdal/swig/java/libgdal.so artifacts/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
