@@ -37,7 +37,9 @@ jobs:
           cd gdal
           mkdir build
           cd build
-          cmake ..
+          cmake .. -DBUILD_SHARED_LIBS=ON -DWITH_JAVA=ON -DCMAKE_PREFIX_PATH=$PROJ_DIR
+          make -j$(nproc)
+          sudo make install
           sudo cmake --build .
           sudo cmake --build . --target install
           echo $GDAL_JAVA_JNI_INSTALL_DIR
