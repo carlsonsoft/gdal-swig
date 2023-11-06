@@ -47,14 +47,16 @@ jobs:
           ls $GDAL_JAVA_JNI_INSTALL_DIR 
           echo ===============
           echo $GDAL_JAVA_JNI_INSTALL_DIR
-          cd  $CMAKE_INSTALL_LIBDIR
-          pwd
+          echo ==================
+          echo  $CMAKE_INSTALL_LIBDIR
 
 
-      # - name: Build SWIG Bindings
-      #   run: |
-      #     cd gdal/swig/java
-      #     make java
+      - name: Build SWIG Bindings
+        run: |
+          cd gdal/swig/java
+          swig -java -c++ -Wall -I../../port -I../../gcore -I../../alg -I../../ogr/ -I../../ogr/ogrsf_frmts -I../../gnm -outdir ./ org.gdal.gdal.i
+          make
+
 
       # - name: Compile SO file
       #   run: |
@@ -64,7 +66,7 @@ jobs:
       - name: Create artifacts
         run: |
           mkdir artifacts
-          cp $GDAL_JAVA_JNI_INSTALL_DIR/libgdal.so artifacts/
+          cp libgdal.so artifacts/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
