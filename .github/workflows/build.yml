@@ -26,8 +26,8 @@ jobs:
 
       - name: Download GDAL source code
         run: |
-          wget https://github.com/OSGeo/gdal/archive/3.6.2.tar.gz
-          tar -xf 3.6.2.tar.gz
+          wget https://github.com/OSGeo/gdal/archive/refs/tags/v3.6.2.tar.gz
+          tar -xf v3.6.2.tar.gz
           mv gdal-3.6.2 gdal
 
       - name: Build GDAL
