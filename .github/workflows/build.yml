@@ -1,0 +1,56 @@
+name: Build GDAL SWIG bindings
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: 1.8
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin swig g++ make
+
+      - name: Download GDAL source code
+        run: |
+          wget https://github.com/OSGeo/gdal/archive/refs/tags/v3.6.2.tar.gz
+          tar -xf v3.6.2.tar.gz
+
+      - name: Build GDAL
+        run: |
+          cd gdal-3.6.2
+          ./configure --with-java
+          make
+
+      - name: Build SWIG Bindings
+        run: |
+          cd gdal-3.6.2/swig/java
+          make java
+
+      - name: Compile SO file
+        run: |
+          cd gdal-3.6.2/swig/java
+          g++ -shared -o libgdal.so libgdal_wrap.o -L/usr/lib -lgdal
+
+      - name: Create artifacts
+        run: |
+          mkdir artifacts
+          cp gdal-3.6.2/swig/java/libgdal.so artifacts/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: gdal-java-bindings
+          path: artifacts/
