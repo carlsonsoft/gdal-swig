@@ -35,8 +35,9 @@ jobs:
           cd gdal
           mkdir build
           cd build
-          cmake .. -DWITH_JAVA=ON -DCMAKE_PREFIX_PATH=$PROJ_DIR
-          make
+          cmake .. -DBUILD_SHARED_LIBS=ON -DWITH_JAVA=ON -DCMAKE_PREFIX_PATH=$PROJ_DIR -DCMAKE_INSTALL_PREFIX=/usr/local/
+          make -j$(nproc)
+          sudo make install
 
       - name: Build SWIG Bindings
         run: |
