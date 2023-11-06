@@ -37,13 +37,15 @@ jobs:
           cd gdal
           mkdir build
           cd build
-          cmake .. -DBUILD_SHARED_LIBS=ON -DWITH_JAVA=ON -DCMAKE_PREFIX_PATH=$PROJ_DIR
+          cmake .. -DBUILD_SHARED_LIBS=ON -DBUILD_JAVA_BINDINGS:BOOL=ON -DWITH_JAVA=ON -DCMAKE_PREFIX_PATH=$PROJ_DIR
           make -j$(nproc)
           sudo make install
           sudo cmake --build .
           sudo cmake --build . --target install
           echo $GDAL_JAVA_JNI_INSTALL_DIR
-          ls ${CMAKE_INSTALL_LIBDIR}/jni 
+          echo $GDAL_JAVA_INSTALL_DIR
+          ls $GDAL_JAVA_JNI_INSTALL_DIR 
+          ls $GDAL_JAVA_INSTALL_DIR
 
 
       # - name: Build SWIG Bindings
