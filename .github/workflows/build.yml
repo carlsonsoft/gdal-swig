@@ -18,6 +18,8 @@ jobs:
         with:
           java-version: 8
           distribution: 'adopt'
+        run: |
+          echo $JAVA_HOME
 
       - name: Install dependencies
         run: |
@@ -35,14 +37,20 @@ jobs:
           cd gdal
           mkdir build
           cd build
-          cmake .. -DBUILD_SHARED_LIBS=ON -DWITH_JAVA=ON -DCMAKE_PREFIX_PATH=$PROJ_DIR -DCMAKE_INSTALL_PREFIX=/usr/local/
-          make -j$(nproc)
-          sudo make install
+          # cmake .. -DBUILD_SHARED_LIBS=ON -DWITH_JAVA=ON -DCMAKE_PREFIX_PATH=$PROJ_DIR -DCMAKE_INSTALL_PREFIX=/usr/local/
+          # make -j$(nproc)
+          # sudo make install
+          cmake ..
+          cmake --build .
+          cmake --build . --target install
+          echo $GDAL_JAVA_JNI_INSTALL_DIR
+          ls ${CMAKE_INSTALL_LIBDIR}/jni 
 
-      - name: Build SWIG Bindings
-        run: |
-          cd gdal/swig/java
-          make java
+
+      # - name: Build SWIG Bindings
+      #   run: |
+      #     cd gdal/swig/java
+      #     make java
 
       - name: Compile SO file
         run: |
