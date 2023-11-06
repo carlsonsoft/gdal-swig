@@ -26,7 +26,6 @@ jobs:
           sudo java -version
           sudo apt-get update
           sudo apt-get install -y gdal-bin swig g++ make cmake libproj-dev libgdal-dev libnetcdf-dev libhdf5-dev
-          sudo find_package(Java)
 
       - name: Download GDAL source code
         run: |
@@ -44,10 +43,12 @@ jobs:
           sudo make install
           sudo cmake --build .
           sudo cmake --build . --target install
-          echo $GDAL_JAVA_JNI_INSTALL_DIR
-          echo $GDAL_JAVA_INSTALL_DIR
+          
           ls $GDAL_JAVA_JNI_INSTALL_DIR 
-          ls $GDAL_JAVA_INSTALL_DIR
+          echo ===============
+          echo $GDAL_JAVA_JNI_INSTALL_DIR
+          cd  $CMAKE_INSTALL_LIBDIR
+          pwd
 
 
       # - name: Build SWIG Bindings
@@ -55,15 +56,15 @@ jobs:
       #     cd gdal/swig/java
       #     make java
 
-      - name: Compile SO file
-        run: |
-          cd gdal/swig/java
-          g++ -shared -o libgdal.so libgdal_wrap.o -L/usr/lib -lgdal
+      # - name: Compile SO file
+      #   run: |
+      #     cd gdal/swig/java
+      #     g++ -shared -o libgdal.so libgdal_wrap.o -L/usr/lib -lgdal
 
       - name: Create artifacts
         run: |
           mkdir artifacts
-          cp gdal/swig/java/libgdal.so artifacts/
+          cp $GDAL_JAVA_JNI_INSTALL_DIR/libgdal.so artifacts/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
