@@ -38,8 +38,8 @@ jobs:
           mkdir build
           cd build
           cmake ..
-          cmake --build .
-          cmake --build . --target install
+          sudo cmake --build .
+          sudo cmake --build . --target install
           echo $GDAL_JAVA_JNI_INSTALL_DIR
           ls ${CMAKE_INSTALL_LIBDIR}/jni 
 
